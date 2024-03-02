@@ -1,0 +1,17 @@
+---
+title: "BIS-15L-Project"
+author: "Eva Moncada"
+date: "2024-03-02"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Which Age Group Commits the Most Crimes In Los Angeles County?
+
+```{r}
+##blah blah
+```
+
