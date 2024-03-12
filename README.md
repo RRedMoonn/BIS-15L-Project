@@ -1,5 +1,6 @@
-# BIS-15L-Project
+# BIS-15L-Project-Group17
 ##Crime Rates in Los Angeles County 2020-2024
+Group 17
 By: Eva Moncada & Netra Patel
 
 Welcome to our project repository! We will be examining the crime rates in Los Angeles County between 2020-2024. 
