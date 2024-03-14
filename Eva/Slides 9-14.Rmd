@@ -176,7 +176,7 @@ crime %>%
         text = element_text(family = "Courier"),  
         legend.text = element_text(family = "Courier"),  
         legend.title = element_text(family = "Courier Bold")) +
-  labs(fill = "Age Group")  # Set the title of the legend to "Age Group"
+  labs(fill = "Age Group")
 
 ```
 
@@ -212,18 +212,18 @@ crime %>%
   summarise(crime_count = n()) %>%
   ggplot(aes(x = as.factor(year_occurred), y = crime_count, fill = as.factor(year_occurred))) +
   geom_bar(stat = "identity", color = "black") +
-  geom_text(aes(label = crime_count), vjust = -0.5, color = "black", size = 3, family = "Courier") +  # Change font family to Courier
+  geom_text(aes(label = crime_count), vjust = -0.5, color = "black", size = 3, family = "Courier") + 
   labs(title = "Crime Counts by 20-29 Year Olds Over Years",
        x = "Year",
        y = "Crime Count",
        fill = "Year") +
   scale_fill_manual(values = c("#FFDAB9", "#D2B48C", "#FFA07A", "#FFE4C4", "#FFB6C1", "#FFD700", "#FAF0E6", "#FF6347", "#F5DEB3")) +
   theme_bw() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6, family = "Courier"),  # Change font family to Courier
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6, family = "Courier"),
         panel.background = element_rect(fill = "#FDF7F6"),
-        text = element_text(family = "Courier"),  # Change font family to Courier
-        legend.text = element_text(family = "Courier"),  # Change font family to Courier
-        legend.title = element_text(family = "Courier Bold"))  # Change font family to Courier Bold
+        text = element_text(family = "Courier"),
+        legend.text = element_text(family = "Courier"),  
+        legend.title = element_text(family = "Courier Bold")) 
 
 ```
 
@@ -284,27 +284,9 @@ In this data, we see that knives were most commonly used of all the weapon types
 
 ##Where were most of the crimes committed?
 
-```{r}
-names(crime)
-```
+
 
 ```{r}
-library(ggplot2)
 
-# Scatter plot with ggplot2
-ggplot(crime, aes(x = lon, y = lat)) +
-  geom_point(alpha = 0.5, color = "red") +
-  labs(title = "Crime Locations", x = "Longitude", y = "Latitude") +
-  theme_minimal()
-
-```
-
-```{r}
-install.packages("leaflet")
-
-
-
-  addTiles() %>%
-  addCircleMarkers(~lon, ~lat, color = "red", opacity = 0.5, popup = ~location)
 ```
 
