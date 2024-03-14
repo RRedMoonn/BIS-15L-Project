@@ -97,7 +97,7 @@ crime %>%
 
 This last graph looked a bit too intense. So, out of curiosity, I wanted to see how each age interval compare to each other in the number of crime incidents committed. 
 
-### Plotting Age Intervals - Slide 10
+### Plotting Age Intervals - Slide 9
 ```{r}
 crime %>%
   filter(vict_age > 14) %>%
@@ -154,7 +154,8 @@ crime %>%
   group_by(year_occurred) %>%
   summarise(crime_count = n())
 ```
-## Plotting the Total Crime Incidents Over the Years - Slide 11
+
+## Plotting the Total Crime Incidents Over the Years - Slide 10
 ```{r}
 crime %>%
   group_by(year_occurred) %>%
@@ -213,7 +214,7 @@ crime %>%
   summarise(crime_count = n())
 ```
 
-##Plotting the Pie Chart - Slide 12
+##Plotting the Pie Chart - Slide 11
 ```{r}
 color_palette <- c("Weapon Used" = "#D2B48C", "Weapon Not Used" = "#FFA07A", "Unsure" = "#FDF7F6")
 crime_summary <- crime %>%
@@ -242,7 +243,7 @@ crime %>%
   arrange(desc(crime_count))
 ```
 
-## Plotting the Top 10 Most Used Weaponry - Slide 13
+## Plotting the Top 10 Most Used Weaponry - Slide 12
 ```{r}
 crime %>%
   filter(!is.na(weapon_desc)) %>%
@@ -305,7 +306,7 @@ crime %>%
  
 ## Timeline of the Crimes
 
-## Most Common Month Crimes Occur - Slide 14
+## Most Common Month Crimes Occur - Slide 13
 ```{r, fig.width=10, fig.height=6}
 crime$date_occ <- as.Date(crime$date_occ)
 
@@ -343,7 +344,7 @@ ggplot(crime, aes(x = time_occ, fill = weapon_desc)) +
 ```
 
 
-# Location - Slide 15
+# Location - Slide 14
 
 ## Where were most of the crimes committed?
 Attempted to use ggmaps however there is so much data that it would not load in a clean manner on R Studio. Below is the work for it. I scratched this from the presentation itself and simply showed a map of Los Angeles with a corresponding table.
