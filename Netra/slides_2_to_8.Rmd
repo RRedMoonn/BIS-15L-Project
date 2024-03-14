@@ -1,6 +1,9 @@
 ---
-title: "slides_2_to_8"
-output: html_document
+title: "Final_Project"
+author: "Netra Patel"
+output: 
+  html_document: 
+    keep_md: true
 date: "2024-03-01"
 keep_md: yes
 ---
@@ -16,10 +19,15 @@ library("tidyverse")
 library("janitor")
 ```
 
-# Loading the data
+# Loading & cleaning the data
 ```{r}
-crime <- read_csv("data/Crime_Data_from_2020_to_Present.csv")%>%
+crime <- read_csv("data/Crime_Data_from_2020_to_Present.csv", na = c("NA","", "-"))%>%
   clean_names()
+```
+
+```{r}
+crime <- crime%>%
+  separate(date_rptd, into = c("month", "day", "year")) #It wouldn't let me knit because the data frame was already changed 
 ```
 
 ```{r}
@@ -29,7 +37,168 @@ naniar::miss_var_summary(crime)
 # Crimes most common in LA
 ```{r}
 crime%>%
-  count(crm_cd_desc, sort = T)%>%
-  top_n(10, crm_cd_desc)
+  group_by(crm_cd_desc)%>%
+  summarise(common = n())%>%
+  top_n(10, common)%>%
+  ggplot(aes(x = crm_cd_desc, y = common, fill = common))+
+  geom_col(color = "black", alpha = 0.7)+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))+
+  theme_minimal()+
+  coord_flip()+
+  labs(title = "Top 10 crimes committed", x = "Number of crimes", y = "Types of crime")
 ```
+
+
+# Vehicles stolen
+```{r}
+crime%>%
+  filter(crm_cd_desc == "VEHICLE - STOLEN")%>%
+  group_by(year, crm_cd_desc)%>%
+  summarise(tot = n(), .groups='keep')%>%
+  ggplot(aes(x = as_factor(year), y = tot, group=crm_cd_desc, fill = crm_cd_desc))+
+  geom_col(color = "black", alpha = 0.7, fill = "red4")+
+  labs(title = "Vehicles stolen from 2020-2024",
+       x = "years",
+       y = "Crime total")+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1),
+        plot.title = element_text(size = 16, face="bold"))+
+  geom_text(aes(label = tot), vjust = -0.1, size = 3, color = "black")+
+  theme_minimal()
+  
+```
+
+# Battery
+```{r}
+crime%>%
+  filter(crm_cd_desc == "BATTERY - SIMPLE ASSAULT")%>%
+  group_by(year, crm_cd_desc)%>%
+  summarise(tot = n(), .groups='keep')%>%
+  ggplot(aes(x = as_factor(year), y = tot, group=crm_cd_desc, color = crm_cd_desc))+
+  geom_line(color = "darkgreen")+
+  geom_point(shape = 1, size = 3, color = "black")+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))+
+  theme_minimal()+
+  labs(title = "Battery assault from 2020-2024",
+       x = "years",
+       y = "Crime total")
+```
+
+# Theft 
+```{r}
+crime%>%
+  filter(crm_cd_desc == "THEFT PLAIN - PETTY ($950 & UNDER)")%>%
+  mutate(year=as.factor(year)) %>% 
+  ggplot(aes(x=year, group=crm_cd_desc, color = crm_cd_desc))+
+  geom_density(fill = "orange", alpha = 0.7)+
+  labs(title = "Theft($950 and under)")+
+  theme_minimal()
+```
+
+# Id theft
+
+```{r}
+crime%>%
+  filter(crm_cd_desc == "THEFT OF IDENTITY")%>%
+  group_by(year, crm_cd_desc)%>%
+  summarise(tot = n(), .groups='keep')%>%
+  ggplot(aes(x = as_factor(year), y = tot, group=crm_cd_desc, color = crm_cd_desc))+
+  geom_col(color = "black", fill = "yellow3")+
+  labs(title = "Identity Theft",
+       x = "Total crime")+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1),
+        plot.title = element_text(size = 16, face="bold"))+
+  geom_text(aes(label = tot), vjust = -0.1, size = 3, color = "black")+
+  theme_minimal()
+```
+# Motorcycle
+```{r}
+crime%>%
+  filter(crm_cd_desc == "THEFT FROM MOTOR VEHICLE - PETTY ($950 & UNDER)")%>%
+  group_by(year, crm_cd_desc)%>%
+  summarise(tot = n(), .groups='keep')%>%
+  ggplot(aes(x = as_factor(year), y = tot, group=crm_cd_desc, fill = crm_cd_desc))+
+  geom_point(color = "orange")+
+  labs(title = "Motor Vehicle Theft",
+       x = "years",
+       y = "Crime total")+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1),
+        plot.title = element_text(size = 15, face="bold"))+
+  geom_text(aes(label = tot), vjust = -0.1, size = 3, color = "black")+
+  theme_minimal()
+```
+
+
+# What sex committed most crimes
+```{r}
+crime %>%
+  filter(vict_sex!="-" & vict_sex!="")%>%
+  filter(vict_sex!="H")%>%
+  group_by(vict_sex, year) %>%
+  summarise(tot = n(), .groups = 'keep') %>%
+  ggplot(aes(x = year, y = tot, fill = vict_sex)) +
+  geom_bar(stat = "identity", color = "black", alpha = 0.7, na.rm = T) +
+  facet_grid(.~vict_sex) +
+  labs(title = "Most crimes committed by sex",
+       x = "years",
+       y = "Crime total")+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1),
+        plot.title = element_text(size = 15, face="bold"))+
+  geom_text(aes(label = tot), vjust = -0.1, size = 3, color = "black")+
+  theme_minimal()
+```
+
+
+
+# shiny app 
+```{r}
+library(shiny)
+library(shinydashboard)
+
+ui <- dashboardPage(
+  dashboardHeader(title = "Crime Rates"),
+  dashboardSidebar(disable=T),
+  dashboardBody(
+    fluidRow(
+      box(width = 4,
+          selectInput("y", "Select Crime", choices = unique(crime$crm_cd_desc)),
+          selectInput("x", "Select Premises", choices = unique(crime$premis_desc))
+          ), 
+      box(width = 6,
+          plotOutput("plot", width = "600px", height = "400px")
+          )
+      ) 
+    ) 
+  )
+server <- function(input, output, session) { 
+  session$onSessionEnded(stopApp)
+  
+  output$plot <- renderPlot({
+    crime %>% 
+      
+      filter(crm_cd_desc !="NA") %>%
+      filter(premis_desc !="NA")%>%
+      filter(crm_cd_desc == input$y & premis_desc == input$x)%>%
+      
+      
+      group_by(year, crm_cd_desc, premis_desc)%>%
+      
+      
+      summarise(tot = n(), .groups='keep')%>%
+      ggplot(aes(x = year, y = tot, fill = tot)) +
+      geom_col(color = "black", alpha = 0.6, fill = "darkgreen")+
+      labs(title = "Number of crime",
+       x = "years",
+       y = "Crime total")+
+      geom_text(aes(label = tot), vjust = -0.1, size = 3, color = "black")+
+      theme_classic()
+    })
+}
+  
+shinyApp(ui, server)
+
+```
+
+
+
+
 
