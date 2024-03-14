@@ -1,5 +1,5 @@
 # BIS-15L-Project-Group17
-##Crime Rates in Los Angeles County 2020-2024
+## Crime Rates in Los Angeles County 2020-2024
 
 Group 17
 
