@@ -1,6 +1,8 @@
 # BIS-15L-Project-Group17
 ##Crime Rates in Los Angeles County 2020-2024
+
 Group 17
+
 By: Eva Moncada & Netra Patel
 
 Welcome to our project repository! With Los Angeles being one of the most common vacation spots along with being many people's dream to live in, we thought it would be interesting to observe the safety of this beloved city. We will be examining the crime rates in Los Angeles County between 2020-2024 to determine how safe the county is. 
